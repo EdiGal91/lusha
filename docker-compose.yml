@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+    nginx:
+        container_name: nginx
+        restart: always
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./nginx
+        ports: 
+            - "80:80"
+        depends_on: 
+            - api
+            - client
+    api:
+        container_name: api
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./server
+        volumes:
+            - /app/node_modules
+            - ./server:/app
+    client:
+        container_name: client
+        stdin_open: true
+        build:
+            context: ./client
+            dockerfile: Dockerfile.dev
+        volumes: 
+            - ./app/node_modules
+            - ./client:/app
